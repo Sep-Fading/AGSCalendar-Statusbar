@@ -1,0 +1,103 @@
+$bg-color: #000000;
+$fg-color: #ffffff;
+$border-color: rgba(255, 255, 255, 0.15);
+$accent-red: #f38ba8;
+$border-radius: 8px;
+
+window.Bar {
+  background: transparent;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.DateIsland,
+.WorkspacesIsland,
+.InfoIsland,
+.TaskIsland {
+  background: #000000;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 0px 8px;
+  margin-top: 12px;
+  margin-left: 18px;
+  margin-right: 18px;
+  font-weight: normal;
+  font-size: 1rem;
+}
+
+.TaskIsland {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.TaskIsland label {
+  color: white;
+}
+
+.WorkspacesIsland {
+  padding: 4px 4px;
+}
+
+.workspace-btn {
+  background: transparent;
+  border-radius: 4px;
+  border-color: white;
+  color: white;
+  padding: 0 8px;
+}
+
+/* Active workspace highlight */
+.workspace-btn.focused {
+  background-color: #ffffff;
+  color: black;
+  border-radius: 6px;
+}
+
+.AudioBtn {
+  color: white;
+}
+
+// CALENDAR
+.CalendarWindow {
+  min-width: 350px;
+  background-color: transparent;
+}
+
+.CalendarContainer {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.CalendarWidget {
+  background-color: rgba(30, 30, 46, 0.8);
+  min-width: 320px;
+  margin: 20px;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.CalendarHeader {
+  margin-bottom: 12px;
+}
+
+.CurrentTimeLine {
+  background-color: red;
+  box-shadow: 0 0 5px 1px rgba(243, 139, 168, 0.7);
+  min-height: 2px;
+}
+
+.TimeLabel {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  margin-top: -6px;
+}
+
+.TimelineArea {
+  background-image: linear-gradient($border-color 1px, transparent 1px);
+  background-size: 100% 80px;
+  background-position: top;
+}

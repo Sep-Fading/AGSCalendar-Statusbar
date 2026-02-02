@@ -1,0 +1,97 @@
+import { Gtk } from "ags/gtk4"
+import { createPoll } from "ags/time"
+import { execAsync } from "ags/process"
+
+function getRelativeTime(dueStr: string): string {
+  if (!dueStr) return ""
+  const year = parseInt(dueStr.slice(0, 4))
+  const month = parseInt(dueStr.slice(4, 6)) - 1
+  const day = parseInt(dueStr.slice(6, 8))
+  const hour = parseInt(dueStr.slice(9, 11))
+  const min = parseInt(dueStr.slice(11, 13))
+
+  const dueDate = new Date(Date.UTC(year, month, day, hour, min))
+  const diffMins = Math.round((dueDate.getTime() - Date.now()) / 60000)
+
+  if (diffMins < 0) return "Overdue - "
+  if (diffMins < 60) return `In ${diffMins}m - `
+  const diffHours = Math.floor(diffMins / 60)
+  if (diffHours < 24) return `In ${diffHours}h - `
+  return `In ${Math.floor(diffHours / 24)}d - `
+}
+
+async function getTopTask(filter: string) {
+  try {
+    const out = await execAsync([
+      "task",
+      "status:pending",
+      filter, // This is "due.any:" or "due.none:"
+      "limit:1", // MUST come before export
+      "rc.report.all.sort=urgency-",
+      "export", // MUST come last
+    ])
+
+    const tasks = JSON.parse(out.trim())
+    if (!tasks || tasks.length === 0) return null
+
+    const task = tasks[0]
+
+    // Double-check: If we asked for no due date, ensure 'due' is missing
+    if (filter === "due.none:" && task.due) return null
+    // Double-check: If we asked for a due date, ensure 'due' is present
+    if (filter === "due.any:" && !task.due) return null
+
+    return task
+  } catch (e) {
+    console.error("Taskwarrior Fetch Error:", e)
+    return null
+  }
+}
+
+// --- CALENDAR SCHEDULE (Tasks WITH due dates) ---
+export default function TaskSchedule() {
+  const taskData = createPoll(null, 60000, () => getTopTask("due.any:"))
+
+  return (
+    <box
+      cssClasses={["TaskIsland", "Schedule"]}
+      spacing={8}
+      visible={taskData((t) => t !== null)}
+    >
+      <label label="📅" cssClasses={["TaskEmoji"]} />
+      <box>
+        <label
+          cssClasses={["TaskDue"]}
+          label={taskData((t) => (t ? getRelativeTime(t.due) : ""))}
+        />
+        <label
+          label={taskData((t) => t?.description || "")}
+          maxWidthChars={25}
+          ellipsize={3}
+          lines={1}
+        />
+      </box>
+    </box>
+  )
+}
+
+// --- GENERAL BACKLOG (Tasks WITHOUT due dates) ---
+export function TaskBacklog() {
+  const taskData = createPoll(null, 60000, () => getTopTask("due.none:"))
+
+  return (
+    <box
+      cssClasses={["TaskIsland", "Backlog"]}
+      spacing={8}
+      visible={taskData((t) => t !== null)}
+    >
+      <label label="📋" cssClasses={["TaskEmoji"]} />
+      <label
+        label={taskData((t) => t?.description || "")}
+        maxWidthChars={25}
+        ellipsize={3}
+        lines={1}
+      />
+    </box>
+  )
+}
