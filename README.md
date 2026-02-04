@@ -5,6 +5,7 @@ This repo now contains a Quickshell-based bar + day timeline widget for Hyprland
 ## Run locally
 
 1. Install Quickshell.
+
 2. Point Quickshell at the config directory in this repository:
 
 ```bash
