@@ -5,10 +5,18 @@ This repo now contains a Quickshell-based bar + day timeline widget for Hyprland
 ## Run locally
 
 1. Install Quickshell.
-2. Point Quickshell at the config in this repository:
+
+2. Point Quickshell at the config directory in this repository:
 
 ```bash
-quickshell -c /path/to/AGSCalendar-Statusbar/quickshell/main.qml
+quickshell -c /path/to/AGSCalendar-Statusbar/quickshell
+```
+
+Alternatively, link the folder into your default config path:
+
+```bash
+ln -s /path/to/AGSCalendar-Statusbar/quickshell ~/.config/quickshell
+quickshell
 ```
 
 ## What you get
